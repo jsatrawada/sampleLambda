@@ -4,7 +4,7 @@ import requests
 import json
 
 def main():
-    st.title("Blog Generation Request")
+    st.title("Blog Generation Request - Feb 20")
     
     # Define the API endpoint
     url = "https://iccp1m5kmk.execute-api.us-east-1.amazonaws.com/dev/blog-generation"
