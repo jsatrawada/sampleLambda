@@ -27,6 +27,24 @@ def main():
                 st.write(response.text)
         except Exception as e:
             st.error(f"Request failed: {str(e)}")
+    
+    # Upload PDF files to S3
+    st.title("Upload PDF Files to S3")
+    
+    directory = st.text_input("Enter Directory Path", "/path/to/pdf/files")
+    bucket_name = st.text_input("Enter S3 Bucket Name", "your-s3-bucket-name")
+    
+    if st.button("Upload PDFs"):
+        s3 = boto3.client('s3')
+        
+        try:
+            for filename in os.listdir(directory):
+                if filename.endswith(".pdf"):
+                    file_path = os.path.join(directory, filename)
+                    s3.upload_file(file_path, bucket_name, filename)
+                    st.success(f"Uploaded {filename} to {bucket_name}")
+        except Exception as e:
+            st.error(f"Upload failed: {str(e)}")
 
 if __name__ == "__main__":
     main()
