@@ -99,11 +99,20 @@ def load_and_split_pdfs(directory):
 
 ## Vector Embedding and vector store
 def get_vector_store(docs):
-    vectorstore_faiss=FAISS.from_documents(
-        docs,
-        bedrock_embeddings
-    )
-    vectorstore_faiss.save_local("faiss_index")
+    if not docs:
+        st.error("No documents to process.")
+        return
+
+    st.write("Generating embeddings for documents...")
+    try:
+        vectorstore_faiss = FAISS.from_documents(
+            docs,
+            bedrock_embeddings
+        )
+        vectorstore_faiss.save_local("faiss_index")
+        st.success("Vector store created and saved locally.")
+    except Exception as e:
+        st.error(f"Failed to create vector store: {str(e)}")
 
 def get_llama3():
     llm = ChatBedrock(
