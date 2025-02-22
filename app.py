@@ -80,9 +80,22 @@ def upload_pdfs_to_s3(directory, bucket_name):
 #                 st.write(uploaded_file.name)
 def data_ingestion(directory):
     st.write(f"Loading PDFs from directory: {directory}")
+    
+    # Check the contents of the directory
+    try:
+        files = os.listdir(directory)
+        st.write(f"Files in directory: {files}")
+    except Exception as e:
+        st.error(f"Failed to list files in directory: {str(e)}")
+        return []
+
     loader = PyPDFDirectoryLoader(directory)
-    documents = loader.load()
-    st.write(f"Loaded {len(documents)} documents")
+    try:
+        documents = loader.load()
+        st.write(f"Loaded {len(documents)} documents")
+    except Exception as e:
+        st.error(f"Failed to load documents: {str(e)}")
+        return []
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
     docs = text_splitter.split_documents(documents)
