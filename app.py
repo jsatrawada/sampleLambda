@@ -79,20 +79,22 @@ def upload_pdfs_to_s3(directory, bucket_name):
 #             for uploaded_file in uploaded_files:
 #                 st.write(uploaded_file.name)
 def data_ingestion(directory):
+    st.write(f"Loading PDFs from directory: {directory}")
     loader = PyPDFDirectoryLoader(directory)
     documents = loader.load()
+    st.write(f"Loaded {len(documents)} documents")
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
     docs = text_splitter.split_documents(documents)
+    st.write(f"Split documents into {len(docs)} chunks")
     return docs
 
 def load_and_split_pdfs(directory):
     if directory:
+        st.write(f"Directory provided: {directory}")
         docs = data_ingestion(directory)
-        st.write(f"Number of documents: {len(docs)}")
+        st.write(f"Number of documents after splitting: {len(docs)}")
         get_vector_store(docs)
-        # for i, doc in enumerate(docs):
-        #     st.write(f"Document {i+1}: {doc.to_json}...")  # Display first 200 characters of each document
     else:
         st.error("Please enter a directory path.")
     st.success("Done")
