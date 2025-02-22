@@ -1,2 +1,8 @@
 boto3
+awscli
+langchain-community
+PyPDF2
+langchain_aws
+faiss-cpu
 streamlit
+pypdf
